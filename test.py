@@ -24,7 +24,7 @@ with mp_hands.Hands(
 ) as hands:
     while mp_hands.Hands():
         ret, img = cam.read()
-        img0 = img.copy()
+        # img0 = img.copy()
 
         img = cv2.flip(img, 1)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -87,3 +87,5 @@ with mp_hands.Hands(
         cv2.imshow('img', img)
         if cv2.waitKey(1) == ord('q'):
             break
+cam.release()
+cv2.destroyAllWindows()
