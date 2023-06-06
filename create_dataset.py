@@ -8,9 +8,9 @@ mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 
 # OpenCV로 웹캠 읽어서 입력 데이터 소스로 지정
-cam = cv2.VideoCapture(0)
+cam = cv2.VideoCapture(1)
 
-actions = ['next', 'back']
+actions = ['pgup', 'pgdn', 'reset']
 seq_length = 30
 secs_for_action = 30
 

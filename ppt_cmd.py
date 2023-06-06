@@ -5,7 +5,7 @@ from tensorflow.keras.models import load_model
 from win32com.client import Dispatch
 from pyautogui import getWindowsWithTitle, keyDown
 
-actions = ['next', 'back', 'pgup', 'pgdn']
+actions = ['pgup', 'pgdn', 'reset']
 seq_length = 30
 
 model = load_model('models/model.h5')
@@ -23,6 +23,7 @@ cap = VideoCapture(0)
 seq = []
 action_seq = []
 last_action = None
+counter = 0
 
 while cap.isOpened():
     ret, img = cap.read()
@@ -83,17 +84,19 @@ while cap.isOpened():
             if action_seq[-1] == action_seq[-2] == action_seq[-3]:
                 this_action = action
 
-                if last_action != this_action:
-                    if this_action == 'next':
-                        keyDown('right')
-                    elif this_action == 'back':
-                        keyDown('left')
-                    elif this_action == 'pgup':
+                if counter == 0:
+                    if this_action == 'pgup':
                         keyDown('pgup')
+                        counter += 1
                     elif this_action == 'pgdn':
                         keyDown('pgdn')
+                        counter += 1
 
                     last_action = this_action
+
+                else:
+                    if this_action == 'reset':
+                        counter = 0
 
             putText(img, f'{this_action.upper()}', org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 20)), fontFace=FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 255, 255), thickness=2)
 
