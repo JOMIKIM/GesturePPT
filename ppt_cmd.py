@@ -4,10 +4,13 @@ from numpy import zeros, linalg, newaxis, arccos, einsum, degrees, concatenate, 
 from tensorflow.keras.models import load_model
 from win32com.client import Dispatch
 from pyautogui import getWindowsWithTitle, keyDown
+import win32com.client
+import pyautogui
+
 
 actions = ['pgup', 'pgdn', 'reset']
 seq_length = 30
-
+ 
 model = load_model('models/model.h5')
 
 # MediaPipe hands model
@@ -18,7 +21,10 @@ hands = mp_hands.Hands(
     min_detection_confidence=0.5,
     min_tracking_confidence=0.5)
 
+
+
 cap = VideoCapture(0)
+
 
 seq = []
 action_seq = []
@@ -86,19 +92,36 @@ while cap.isOpened():
 
                 if counter == 0:
                     if this_action == 'pgup':
+                        ppt = win32com.client.Dispatch("PowerPoint.Application")
+                        active_presentation = ppt.ActivePresentation
+                        window = pyautogui.getWindowsWithTitle('pptx')[0]
+                        window.activate()
                         keyDown('pgup')
                         counter += 1
+                        window = pyautogui.getWindowsWithTitle('img')[0]
+                        window.activate()
                     elif this_action == 'pgdn':
+                        ppt = win32com.client.Dispatch("PowerPoint.Application")
+                        active_presentation = ppt.ActivePresentation
+                        window = pyautogui.getWindowsWithTitle('pptx')[0]
+                        window.activate()
                         keyDown('pgdn')
                         counter += 1
+                        window = pyautogui.getWindowsWithTitle('img')[0]
+                        window.activate()
+
 
                     last_action = this_action
 
                 else:
                     if this_action == 'reset':
                         counter = 0
-
+                        window = pyautogui.getWindowsWithTitle('img')[0]
+                        window.activate()
             putText(img, f'{this_action.upper()}', org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 20)), fontFace=FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 255, 255), thickness=2)
+
+    
+
 
     imshow('img', img)
     if waitKey(1) == ord('q'):
